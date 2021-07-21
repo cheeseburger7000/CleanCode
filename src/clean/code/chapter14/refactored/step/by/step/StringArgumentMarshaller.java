@@ -10,7 +10,8 @@ public class StringArgumentMarshaller implements ArgumentMarshaller {
   public void set(Iterator<String> currentArgument) throws ArgsException {
     try {
       stringValue = currentArgument.next();
-    } catch (NoSuchElementException e) {
+    }
+    catch (NoSuchElementException e) {
       throw new ArgsException(ArgsException.ErrorCode.MISSING_STRING);
     }
   }
@@ -18,7 +19,8 @@ public class StringArgumentMarshaller implements ArgumentMarshaller {
   public static String getValue(ArgumentMarshaller am) {
     if ((am != null) && am instanceof StringArgumentMarshaller) {
       return ((StringArgumentMarshaller) am).stringValue;
-    } else {
+    }
+    else {
       return "";
     }
   }

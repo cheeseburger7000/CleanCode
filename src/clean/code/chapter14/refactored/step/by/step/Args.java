@@ -5,9 +5,9 @@ import java.util.*;
 import static clean.code.chapter14.refactored.step.by.step.ArgsException.ErrorCode.*;
 
 public class Args {
-  private Map<Character, ArgumentMarshaller> marshallers =
-      new HashMap<Character, ArgumentMarshaller>();
-  private Set<Character> argsFound = new HashSet<Character>();
+  // 协调员
+  private Map<Character, ArgumentMarshaller> marshallers = new HashMap<>();
+  private Set<Character> argsFound = new HashSet<>();
   private int noOfArguments = 0;
   private Iterator<String> currentArgument;
 
@@ -24,20 +24,27 @@ public class Args {
     }
   }
 
+  /**
+   * n*,p#,m##,e
+   */
   private void parseSchemaElement(String element) throws ArgsException {
-    char elementId = element.charAt(0);
-    String elementTail = element.substring(1);
+    char elementId = element.charAt(0); // id
+    String elementTail = element.substring(1); // 类型
     validateSchemaElementId(elementId);
 
-    if (elementTail.length() == 0)
+    if (elementTail.length() == 0) {
       marshallers.put(elementId, new BooleanArgumentMarshaller());
-    else if (elementTail.equals("*"))
+    }
+    else if (elementTail.equals("*")) {
       marshallers.put(elementId, new StringArgumentMarshaller());
+    }
     else if (elementTail.equals("#")) {
       marshallers.put(elementId, new IntegerArgumentMarshaller());
-    } else if (elementTail.equals("##")) {
+    }
+    else if (elementTail.equals("##")) {
       marshallers.put(elementId, new DoubleArgumentMarshaller());
-    } else {
+    }
+    else {
       throw new ArgsException(INVALID_ARGUMENT_FORMAT, elementId, elementTail);
     }
   }
@@ -54,7 +61,8 @@ public class Args {
       if (arg.startsWith("-")) {
         noOfArguments = ++noOfArguments;
         parseArgumentCharacters(arg.substring(1));
-      } else {
+      }
+      else {
         break;
       }
     }
@@ -76,8 +84,9 @@ public class Args {
     }
     argsFound.add(argChar);
     try {
-    m.set(currentArgument);
-    } catch (ArgsException e) {
+      m.set(currentArgument);
+    }
+    catch (ArgsException e) {
       e.setErrorArgumentId(argChar);
       throw e;
     }
